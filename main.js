@@ -46,70 +46,112 @@ showPage('home');
 // Update button text on page load
 toggleMusicBtn.textContent = 'Play Music';
 
-// Simple F1 Quiz
-const quizData = [
-    {
-        question: "Which team won the 2023 Constructors' Championship?",
-        answers: ["Red Bull Racing", "Ferrari", "Mercedes"],
-        correct: "Red Bull Racing"
-    },
-    {
-        question: "How many drivers are there in the 2025 season Formula 1 race?",
-        answers: ["20", "22", "18"],
-        correct: "20"
-    },
-    {
-        question: "What tyre colours represent Soft compound?",
-        answers: ["Red", "Yellow", "White"],
-        correct: "Red"
-    }
-];
+window.addEventListener('DOMContentLoaded', () => {
+    // --- F1 Quiz Game ---
+    const startQuizBtn = document.getElementById('start-quiz');
+    const quizContainer = document.getElementById('quiz-container');
 
-let currentQuestion = 0;
-let score = 0;
+    const quizData = [
+        {
+            question: "Which team won the 2023 Constructors' Championship?",
+            answers: ["Red Bull Racing", "Ferrari", "Mercedes"],
+            correct: "Red Bull Racing"
+        },
+        {
+            question: "How many drivers are there in the 2025 season Formula 1 race?",
+            answers: ["20", "22", "18"],
+            correct: "20"
+        },
+        {
+            question: "What tyre colours represent Soft compound?",
+            answers: ["Red", "Yellow", "White"],
+            correct: "Red"
+        }
+    ];
 
-const questionEl = document.getElementById('question');
-const answersEl = document.getElementById('answers');
-const nextBtn = document.getElementById('next-btn');
-const resultEl = document.getElementById('result');
+    let currentQuestion = 0;
+    let score = 0;
 
-function loadQuiz() {
-    const q = quizData[currentQuestion];
-    questionEl.textContent = q.question;
-    answersEl.innerHTML = '';
-    q.answers.forEach(answer => {
-        const btn = document.createElement('button');
-        btn.textContent = answer;
-        btn.addEventListener('click', () => {
-            if (answer === q.correct) {
-                score++;
-            }
-            nextBtn.style.display = 'block';
+    const questionEl = document.getElementById('question');
+    const answersEl = document.getElementById('answers');
+    const nextBtn = document.getElementById('next-btn');
+    const resetQuizBtn = document.getElementById('reset-quiz');
+    const resultEl = document.getElementById('result');
+
+    function loadQuiz() {
+        const q = quizData[currentQuestion];
+        questionEl.textContent = q.question;
+        answersEl.innerHTML = '';
+        resultEl.textContent = '';
+
+        q.answers.forEach(answer => {
+            const btn = document.createElement('button');
+            btn.textContent = answer;
+            btn.addEventListener('click', () => {
+                if (btn.classList.contains('clicked')) return;
+
+                btn.classList.add('clicked');
+
+                if (answer === q.correct) {
+                    btn.classList.add('correct');
+                    score++;
+                } else {
+                    btn.classList.add('wrong');
+
+                    // Highlight correct answer
+                    const allBtns = answersEl.querySelectorAll('button');
+                    allBtns.forEach(b => {
+                        if (b.textContent === q.correct) {
+                            b.classList.add('correct');
+                        }
+                        b.disabled = true;
+                    });
+                }
+
+                nextBtn.style.display = 'block';
+            });
+            answersEl.appendChild(btn);
         });
-        answersEl.appendChild(btn);
-    });
-    nextBtn.style.display = 'none';
-}
 
-nextBtn.addEventListener('click', () => {
-    currentQuestion++;
-    if (currentQuestion < quizData.length) {
-        loadQuiz();
-    } else {
-        questionEl.textContent = "Quiz Finished!";
-        answersEl.innerHTML = `Your Score: ${score} / ${quizData.length}`;
         nextBtn.style.display = 'none';
     }
-});
 
-loadQuiz();
+    // Start Quiz Button Logic
+    startQuizBtn.addEventListener('click', () => {
+        startQuizBtn.style.display = 'none';
+        quizContainer.style.display = 'block';
+        currentQuestion = 0;
+        score = 0;
+        loadQuiz();
+    });
+
+    // Next Question
+    nextBtn.addEventListener('click', () => {
+        currentQuestion++;
+        if (currentQuestion < quizData.length) {
+            loadQuiz();
+        } else {
+            questionEl.textContent = "Quiz Finished!";
+            answersEl.innerHTML = '';
+            resultEl.textContent = `Your Score: ${score} / ${quizData.length}`;
+            nextBtn.style.display = 'none';
+        }
+    });
+
+    // Reset Quiz Button
+    resetQuizBtn.addEventListener('click', () => {
+        currentQuestion = 0;
+        score = 0;
+        loadQuiz();
+    });
+});
 
 // Reflex Game Logic with Reset
 const countdownEl = document.getElementById('countdown');
 const carEl = document.getElementById('game-car');
 const reactionEl = document.getElementById('reaction-time');
 const startBtn = document.getElementById('start-reflex');
-const resetBtn = document.getElementById('reset-reflex');
+const resetGameBtn = document.getElementById('reset-reflex');
 
 let startTime, countdownInterval, timeoutID;
 
