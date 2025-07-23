@@ -417,10 +417,14 @@
         <!-- Mini Quiz -->
         <section id="quiz" class="page">
             <h2>Formula 1 Mini Quiz</h2>
-            <div id="quiz-container">
+
+            <button id="start-quiz">Start Quiz</button>
+
+            <div id="quiz-container" style="display: none;">
                 <p id="question"></p>
                 <div id="answers"></div>
-                <button id="next-btn">Next</button>
+                <button id="next-btn" style="display: none;">Next</button>
+                <button id="reset-quiz">Reset Quiz</button>
                 <p id="result"></p>
             </div>
         </section>
@@ -445,6 +449,10 @@
     <button id="toggle-music">Play/Pause Music</button>
 
     <script src="main.js"></script>
+
+    <footer>
+        <img id="qrCodeImg" src="images/qrcodeimg.png">
+    </footer>
 </body>
 
 </html>
