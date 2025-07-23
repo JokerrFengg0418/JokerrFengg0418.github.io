@@ -218,5 +218,3 @@ resetBtn.addEventListener('click', function() {
     carEl.style.transition = 'none';
     startBtn.disabled = false;
 });
-
-
