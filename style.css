@@ -267,12 +267,50 @@ tr:hover {
     }
 }
 
+.correct {
+    background-color: #28a745 !important; /* Green */
+}
+
+.wrong {
+    background-color: #dc3545 !important; /* Red */
+}
+
+#reset-quiz {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #444;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#reset-quiz:hover {
+    background-color: #e10600;
+}
+
 #quiz-container {
     background-color: #2a2a2a;
     padding: 20px;
     border-radius: 10px;
     text-align: center;
     margin-top: 20px;
+}
+
+#start-quiz {
+    display: block;
+    margin: 20px auto;
+    padding: 15px 30px;
+    font-size: 18px;
+    background-color: #e10600;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+#start-quiz:hover {
+    background-color: #c00000;
 }
 
 #answers button {
@@ -343,3 +381,16 @@ tr:hover {
     background-color: #e10600;
 }
 
+/* Base style for QR code on desktop */
+#qrCodeImg {
+    display: block;
+    margin: 30px auto; 
+    width: 150px; 
+    height: auto;
+}
+
+@media (max-width: 800px) {
+    #qrCodeImg {
+        display: none;
+    }
+}
