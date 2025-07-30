@@ -208,7 +208,7 @@ function clickHandler() {
 }
 
 // Reset Button Logic 
-resetBtn.addEventListener('click', function() {
+resetGameBtn.addEventListener('click', function() {
     clearInterval(countdownInterval);
     clearTimeout(timeoutID);
     window.removeEventListener('click', clickHandler);
