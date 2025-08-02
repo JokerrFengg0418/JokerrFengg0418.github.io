@@ -22,7 +22,7 @@ btnHistory.addEventListener('click', () => showPage('history'));
 btnTeams.addEventListener('click', () => showPage('teams'));
 btnDrivers.addEventListener('click', () => showPage('drivers'));
 btnMiniQuiz.addEventListener('click', () => showPage('quiz'));
-btnMiniGame.addEventListener('click', () => showPage('reflex-game'));
+btnMiniGame.addEventListener('click', () => showPage('pitstop-game'));
 
 // Music toggle logic
 const bgMusic = document.getElementById('bg-music');
@@ -146,75 +146,100 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Reflex Game Logic with Reset
-const countdownEl = document.getElementById('countdown');
-const carEl = document.getElementById('game-car');
-const reactionEl = document.getElementById('reaction-time');
-const startBtn = document.getElementById('start-reflex');
-const resetGameBtn = document.getElementById('reset-reflex');
+// Pit Stop Challenge
+const startPitstopBtn = document.getElementById('start-pitstop');
+const tires = document.querySelectorAll('.tire');
+const timerDisplay = document.getElementById('pitstop-timer');
+const resultDisplay = document.getElementById('pitstop-result');
 
-let startTime, countdownInterval, timeoutID;
+let pitstopStartTime;
+let changedCount = 0;
+let pitstopInterval;
 
-// Start Game
-startBtn.addEventListener('click', function() {
-    startBtn.disabled = true;
-    countdownEl.textContent = 'Get Ready...';
-    reactionEl.textContent = '';
-    carEl.style.left = '0';
-    carEl.style.transition = 'none';
+startPitstopBtn.addEventListener('click', () => {
+    changedCount = 0;
+    resultDisplay.textContent = '';
+    tires.forEach(tire => tire.classList.remove('changed'));
 
-    // Countdown (Timed Event)
-    let countdown = 3;
-    countdownInterval = setInterval(() => {
-        countdown--;
-        if (countdown > 0) {
-            countdownEl.textContent = countdown;
-        } else {
-            clearInterval(countdownInterval);
-            countdownEl.textContent = 'GO!';
-            startTime = new Date().getTime();
+    // Disable tire clicks until countdown ends
+    tires.forEach(tire => tire.removeEventListener('click', changeTire));
 
-            // Listen for click after GO!
-            window.addEventListener('click', clickHandler);
-        }
-    }, 1000);
-
-    // Auto-fail after timeout
-    timeoutID = setTimeout(() => {
-        window.removeEventListener('click', clickHandler);
-        countdownEl.textContent = 'Too Slow!';
-        reactionEl.textContent = 'Reaction Time: Too Slow!';
-        carEl.style.left = '0';
-        startBtn.disabled = false;
-    }, 8000);
+    // Start countdown lights
+    startLightsCountdown(() => {
+        pitstopStartTime = performance.now();
+        pitstopInterval = setInterval(updatePitstopTimer, 10);
+        tires.forEach(tire => tire.addEventListener('click', changeTire));
+    });
 });
 
-// Click Reaction
-function clickHandler() {
-    const reaction = (new Date().getTime() - startTime) / 1000;
-    window.removeEventListener('click', clickHandler);
-    clearTimeout(timeoutID);
-
-    countdownEl.textContent = 'You clicked!';
-    reactionEl.textContent = `Reaction Time: ${reaction.toFixed(3)} seconds`;
-
-    // Car Animation
-    let distance = Math.max(10, (3 - reaction) * 30);
-    distance = Math.min(distance, 80);
-    carEl.style.transition = 'left 1s ease';
-    carEl.style.left = distance + '%';
-
-    startBtn.disabled = false;
+function updatePitstopTimer() {
+    const elapsed = (performance.now() - pitstopStartTime) / 1000;
+    timerDisplay.textContent = `Time: ${elapsed.toFixed(3)}s`;
 }
 
-// Reset Button Logic 
-resetGameBtn.addEventListener('click', function() {
-    clearInterval(countdownInterval);
-    clearTimeout(timeoutID);
-    window.removeEventListener('click', clickHandler);
-    countdownEl.textContent = 'Get Ready...';
-    reactionEl.textContent = '';
-    carEl.style.left = '0';
-    carEl.style.transition = 'none';
-    startBtn.disabled = false;
+function changeTire(e) {
+    const tire = e.target;
+    if (!tire.classList.contains('changed')) {
+        tire.classList.add('changed');
+        changedCount++;
+
+        if (changedCount === tires.length) {
+            finishPitstop();
+        }
+    }
+}
+
+function finishPitstop() {
+    clearInterval(pitstopInterval);
+    const finalTime = (performance.now() - pitstopStartTime) / 1000;
+    resultDisplay.textContent = `Pit Stop Complete! Time: ${finalTime.toFixed(3)} seconds`;
+
+    // Disable further clicks
+    tires.forEach(tire => tire.removeEventListener('click', changeTire));
+
+    // Show Try Again button
+    document.getElementById('try-again-pitstop').style.display = 'block';
+}
+
+const tryAgainBtn = document.getElementById('try-again-pitstop');
+
+tryAgainBtn.addEventListener('click', () => {
+    changedCount = 0;
+    resultDisplay.textContent = '';
+    tires.forEach(tire => tire.classList.remove('changed'));
+    timerDisplay.textContent = 'Time: 0.000s';
+    document.getElementById('try-again-pitstop').style.display = 'none';
+
+    // Optionally re-enable countdown lights + start
+    startLightsCountdown(() => {
+        pitstopStartTime = performance.now();
+        pitstopInterval = setInterval(updatePitstopTimer, 10);
+        tires.forEach(tire => tire.addEventListener('click', changeTire));
+    });
 });
+
+const startLights = document.querySelectorAll('#start-lights .light');
+
+function startLightsCountdown(callback) {
+    let index = 0;
+
+    const interval = setInterval(() => {
+        if (index < startLights.length) {
+            startLights[index].classList.add('on');
+            index++;
+        } else {
+            clearInterval(interval);
+            // Turn off all reds and show green
+            setTimeout(() => {
+                startLights.forEach(light => light.classList.remove('on'));
+                startLights.forEach(light => light.classList.add('go'));
+
+                // Delay a bit before hiding lights and starting the pit stop
+                setTimeout(() => {
+                    startLights.forEach(light => light.classList.remove('go'));
+                    callback(); // Start pit stop after countdown
+                }, 800);
+            }, 500);
+        }
+    }, 800);
+}
