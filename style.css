@@ -329,55 +329,119 @@ tr:hover {
     background-color: #e10600;
 }
 
-.reflex-container {
-    text-align: center;
-    margin-top: 30px;
+#pitstop-container {
+    display: grid;
+    grid-template-columns: repeat(2, 100px);
+    gap: 20px;
+    justify-content: center;
+    margin: 20px auto;
 }
 
-#countdown {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #e10600;
-}
-
-#game-car {
-    width: 100px;
+.tire {
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle at 50% 50%, #111 30%, #222 70%);
+    border: 10px solid #333;
+    border-radius: 50%;
     position: relative;
-    left: 0;
-    transition: left 1s linear;
-    margin-bottom: 20px;
+    cursor: pointer;
+    box-shadow: inset 0 0 10px #000, 0 4px 8px rgba(0, 0, 0, 0.6);
+    transition: transform 0.2s, background 0.3s;
 }
 
-#reaction-time {
-    margin-top: 20px;
-    font-size: 20px;
+.tire::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 30px;
+    height: 30px;
+    background-color: #666;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: inset 0 0 4px #000;
 }
 
-#start-reflex {
-    padding: 15px 25px;
+.tire::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 70px;
+    height: 70px;
+    border: 5px dashed #555;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.tire:hover {
+    transform: scale(1.05);
+}
+
+.tire.changed {
+    background: radial-gradient(circle at 50% 50%, #222 30%, #28a745 80%);
+    border-color: #28a745;
+}
+
+#start-pitstop {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 16px;
     background-color: #e10600;
     color: white;
-    font-size: 18px;
     border: none;
     border-radius: 8px;
     cursor: pointer;
 }
 
-#reset-reflex {
+#start-pitstop:hover {
+    background-color: #c00000;
+}
+
+#pitstop-timer, #pitstop-result {
+    text-align: center;
+    font-size: 18px;
     margin-top: 10px;
-    padding: 12px 20px;
+}
+
+.lights-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.light {
+    width: 30px;
+    height: 30px;
+    background-color: #333;
+    border-radius: 50%;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.8);
+    transition: background-color 0.5s;
+}
+
+.light.on {
+    background-color: red;
+}
+
+.light.go {
+    background-color: green;
+}
+
+#try-again-pitstop {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 16px;
     background-color: #444;
     color: white;
-    font-size: 16px;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
 }
 
-#reset-reflex:hover {
+#try-again-pitstop:hover {
     background-color: #e10600;
 }
 
@@ -394,3 +458,4 @@ tr:hover {
         display: none;
     }
 }
+
