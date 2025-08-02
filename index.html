@@ -429,18 +429,30 @@
             </div>
         </section>
 
-        <!-- Mini Game -->
-        <section id="reflex-game" class="page">
-            <h2>Formula 1 Reflex Mini Game</h2>
-            <p>Wait for "GO!" and click as fast as you can! The car moves based on your reaction time!</p>
+       <!-- Mini Game -->
+        <section id="pitstop-game" class="page">
+            <h2>Formula 1 Pit Stop Challenge</h2>
+            <p>Click all 4 tires as fast as you can to complete the pit stop!</p>
 
-            <div class="reflex-container">
-                <div id="countdown">Get Ready...</div>
-                <img src="images/car.png" id="game-car" alt="Car">
-                <p id="reaction-time"></p>
-                <button id="start-reflex">Start Game</button>
-                <button id="reset-reflex">Reset</button>
+            <div id="pitstop-container">
+                <div class="tire" id="tire1"></div>
+                <div class="tire" id="tire2"></div>
+                <div class="tire" id="tire3"></div>
+                <div class="tire" id="tire4"></div>
             </div>
+
+            <div id="start-lights" class="lights-container">
+                <div class="light"></div>
+                <div class="light"></div>
+                <div class="light"></div>
+                <div class="light"></div>
+                <div class="light"></div>
+            </div>
+
+            <button id="start-pitstop">Start Pit Stop</button>
+            <p id="pitstop-timer">Time: 0.000s</p>
+            <p id="pitstop-result"></p>
+            <button id="try-again-pitstop" style="display:none;">Try Again</button>
         </section>
     </main>
 
@@ -456,3 +468,4 @@
 </body>
 
 </html>
+
