@@ -3,9 +3,21 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>Formula 1 Interactive Guide</title>
     <link rel="stylesheet" href="style.css">
+
+    <!-- Full-screen on iOS Safari -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="F1 Interactive">
+
+    <!-- Full-screen on Android Chrome -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#e10600">
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="images/icon-192.png">
 </head>
 
 <body>
@@ -429,7 +441,7 @@
             </div>
         </section>
 
-       <!-- Mini Game -->
+        <!-- Mini Game -->
         <section id="pitstop-game" class="page">
             <h2>Formula 1 Pit Stop Challenge</h2>
             <p>Click all 4 tires as fast as you can to complete the pit stop!</p>
@@ -468,4 +480,3 @@
 </body>
 
 </html>
-
